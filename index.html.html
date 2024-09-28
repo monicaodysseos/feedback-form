@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Training Feedback Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #d5cee1;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .logo {
+            width: 100px;
+            height: 100px;
+            background-color: #5b319d;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #5b319d;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            color: #5b319d;
+        }
+        input[type="text"], input[type="email"], select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #d5cee1;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+        }
+        .rating > input {
+            display: none;
+        }
+        .rating > label {
+            position: relative;
+            width: 1em;
+            font-size: 30px;
+            color: #5b319d;
+            cursor: pointer;
+        }
+        .rating > label::before {
+            content: "\2605";
+            position: absolute;
+            opacity: 0;
+        }
+        .rating > label:hover:before,
+        .rating > label:hover ~ label:before {
+            opacity: 1 !important;
+        }
+        .rating > input:checked ~ label:before {
+            opacity: 1;
+        }
+        .rating:hover > input:checked ~ label:before {
+            opacity: 0.4;
+        }
+        button {
+            background-color: #5b319d;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #4a2980;
+        }
+        .suggestions {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 5px;
+        }
+        .suggestion {
+            background-color: #e0e0e0;
+            padding: 5px;
+            margin: 5px 0;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo"></div>
+        <h1>Training Feedback Form</h1>
+        <form id="feedbackForm">
+            <label for="name">Name (optional):</label>
+            <input type="text" id="name" name="name">
+
+            <label for="email">Email Address:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label>Rate the Training:</label>
+            <div class="rating">
+                <input type="radio" id="star5" name="rating" value="5" /><label for="star5">5</label>
+                <input type="radio" id="star4" name="rating" value="4" /><label for="star4">4</label>
+                <input type="radio" id="star3" name="rating" value="3" /><label for="star3">3</label>
+                <input type="radio" id="star2" name="rating" value="2" /><label for="star2">2</label>
+                <input type="radio" id="star1" name="rating" value="1" /><label for="star1">1</label>
+            </div>
+
+            <label>Rate the Trainer:</label>
+            <div class="rating">
+                <input type="radio" id="trainerStar5" name="trainerRating" value="5" /><label for="trainerStar5">5</label>
+                <input type="radio" id="trainerStar4" name="trainerRating" value="4" /><label for="trainerStar4">4</label>
+                <input type="radio" id="trainerStar3" name="trainerRating" value="3" /><label for="trainerStar3">3</label>
+                <input type="radio" id="trainerStar2" name="trainerRating" value="2" /><label for="trainerStar2">2</label>
+                <input type="radio" id="trainerStar1" name="trainerRating" value="1" /><label for="trainerStar1">1</label>
+            </div>
+
+            <label for="contentRelevance">Content Relevance:</label>
+            <select id="contentRelevance" name="contentRelevance" required>
+                <option value="">Please select</option>
+                <option value="Highly Relevant">Highly Relevant</option>
+                <option value="Somewhat Relevant">Somewhat Relevant</option>
+                <option value="Not Relevant">Not Relevant</option>
+            </select>
+
+            <label for="keyTakeaways">Key Takeaways:</label>
+            <textarea id="keyTakeaways" name="keyTakeaways" rows="4" required></textarea>
+            <div id="keyTakeawaysSuggestions" class="suggestions"></div>
+
+            <label for="suggestions">Suggestions for Improvement:</label>
+            <textarea id="suggestions" name="suggestions" rows="4" required></textarea>
+            <div id="suggestionsSuggestions" class="suggestions"></div>
+
+            <label>Would You Recommend This Training?</label>
+            <div>
+                <input type="radio" id="recommendYes" name="recommend" value="Yes" required>
+                <label for="recommendYes">Yes</label>
+                <input type="radio" id="recommendNo" name="recommend" value="No" required>
+                <label for="recommendNo">No</label>
+            </div>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        const keyTakeawaysSuggestions = [
+            "Great content",
+            "Engaging trainer",
+            "Practical examples",
+            "Clear explanations",
+            "Relevant to my work"
+        ];
+
+        const improvementSuggestions = [
+            "More hands-on exercises",
+            "Additional real-world examples",
+            "More time for Q&A",
+            "Provide follow-up resources",
+            "Include more group discussions"
+        ];
+
+        function showSuggestions(inputId, suggestionsId, suggestions) {
+            const input = document.getElementById(inputId);
+            const suggestionsDiv = document.getElementById(suggestionsId);
+
+            input.addEventListener('input', () => {
+                const inputText = input.value.toLowerCase();
+                const matchingSuggestions = suggestions.filter(s => 
+                    s.toLowerCase().includes(inputText) && inputText.length > 0
+                );
+
+                suggestionsDiv.innerHTML = '';
+                matchingSuggestions.forEach(s => {
+                    const div = document.createElement('div');
+                    div.textContent = s;
+                    div.className = 'suggestion';
+                    div.onclick = () => {
+                        input.value += (input.value ? ', ' : '') + s;
+                        suggestionsDiv.innerHTML = '';
+                    };
+                    suggestionsDiv.appendChild(div);
+                });
+            });
+        }
+
+        showSuggestions('keyTakeaways', 'keyTakeawaysSuggestions', keyTakeawaysSuggestions);
+        showSuggestions('suggestions', 'suggestionsSuggestions', improvementSuggestions);
+
+        document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            let body = '';
+            for (let [key, value] of formData.entries()) {
+                body += `${key}: ${value}\n`;
+            }
+
+            const emailLink = `mailto:monica.odysseos@cy.gt.com?subject=Training Feedback&body=${encodeURIComponent(body)}`;
+            window.location.href = emailLink;
+        });
+    </script>
+</body>
+</html>
